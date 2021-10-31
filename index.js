@@ -21,6 +21,7 @@ async function run() {
 
         const database = client.db('Hotel');
         const servicesCollection = database.collection('serviece');
+        const myOrdersCollection = database.collection('myOrders')
         const galleryCollection = database.collection('gallery');
         const gusetCollection = database.collection('gusets');
 
@@ -33,9 +34,25 @@ async function run() {
         // GET ONE SERVICE DATA FROM servicesCollection
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
-            const query ={ _id:ObjectId(id)}
-            const service =await servicesCollection.findOne(query);
+            const query = { _id: ObjectId(id) }
+            const service = await servicesCollection.findOne(query);
             res.json(service);
+        })
+        //POST API add a new service
+        app.post('/services', async (req, res) => {
+            const newService = req.body;
+            const result = await servicesCollection.insertOne(newService)
+            res.send(result)
+        })
+        //POST API. STORE data to myOrders
+        app.post('/myOrders', async (req, res) => {
+            console.log('hit to myOrders collection');
+            console.log(req.body.order.orderName)
+            // console.log(req.body)
+            const email = req.body.email;
+            const name =req.body.userName;
+            console.log(email)
+            console.log(name)
         })
         //GET GALLERY DATA FROM DATABASE
         app.get('/gallery', async (req, res) => {
@@ -54,12 +71,12 @@ async function run() {
         });
     }
 
-    finally{
+    finally {
         // await close.client()
     }
 
 }
-    
+
 
 
 run().catch(console.dir);
