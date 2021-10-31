@@ -47,13 +47,25 @@ async function run() {
         //POST API. STORE data to myOrders
         app.post('/myOrders', async (req, res) => {
             console.log('hit to myOrders collection');
-            console.log(req.body.order.orderName)
+            const ORDER = req.body;
+            // console.log('Order from client side : ',ORDER)
             // console.log(req.body)
             const email = req.body.email;
-            const name =req.body.userName;
-            console.log(email)
-            console.log(name)
+            const name = req.body.userName;
+            const existOrder = await myOrdersCollection.insertOne(ORDER);
+            console.log(existOrder)
+            res.send(existOrder)
         })
+        //GET DATA FROM myOrderscollection
+        app.get('/myOrders',async(req,res)=>{
+            const email = req.query.email;
+            const cursor =myOrdersCollection.find({email:req.query.email});
+            console.log('My Email is : ',email)
+            const result =await cursor.toArray()
+            console.log(result)
+            res.json(result)
+        })
+        
         //GET GALLERY DATA FROM DATABASE
         app.get('/gallery', async (req, res) => {
             const cursor = galleryCollection.find({});
@@ -70,17 +82,13 @@ async function run() {
             })
         });
     }
-
     finally {
         // await close.client()
     }
 
 }
 
-
-
 run().catch(console.dir);
-
 
 
 app.get('/', (req, res) => {
