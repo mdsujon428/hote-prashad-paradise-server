@@ -45,15 +45,11 @@ async function run() {
             res.send(result)
         })
         //POST API. STORE data to myOrders
-        app.post('/myOrders', async (req, res) => {
-            console.log('hit to myOrders collection');
+        app.post('/myOrders', async (req, res) => {   
             const ORDER = req.body;
-            // console.log('Order from client side : ',ORDER)
-            // console.log(req.body)
             const email = req.body.email;
             const name = req.body.userName;
             const existOrder = await myOrdersCollection.insertOne(ORDER);
-            console.log(existOrder)
             res.send(existOrder)
         })
         //GET DATA FROM myOrderscollection
