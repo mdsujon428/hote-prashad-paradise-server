@@ -54,14 +54,17 @@ async function run() {
         })
         //GET DATA FROM myOrderscollection
         app.get('/myOrders',async(req,res)=>{
-            const email = req.query.email;
             const cursor =myOrdersCollection.find({email:req.query.email});
-            console.log('My Email is : ',email)
             const result =await cursor.toArray()
-            console.log(result)
             res.json(result)
         })
-        
+        // DELETE DATA FROM DATABASE 
+        app.delete('/myOrders/:id',async(req,res)=>{
+            const id =req.params.id;
+            const query ={_id:ObjectId(id)}
+            const result = await myOrdersCollection.deleteOne(query);
+            res.json(result)
+        })
         //GET GALLERY DATA FROM DATABASE
         app.get('/gallery', async (req, res) => {
             const cursor = galleryCollection.find({});
