@@ -51,7 +51,7 @@ async function run() {
             const name = req.body.userName;
             const existOrder = await myOrdersCollection.insertOne(ORDER);
             res.send(existOrder)
-        })
+        }) 
         //GET DATA FROM myOrderscollection
         app.get('/myOrders',async(req,res)=>{
             const cursor =myOrdersCollection.find({email:req.query.email});
